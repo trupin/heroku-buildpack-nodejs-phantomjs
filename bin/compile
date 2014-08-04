@@ -65,7 +65,7 @@ phantomjs_url="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$phanto
 curl $phantomjs_url -L -s -o - | tar xjf - -C $build_dir
 
 # Move phantomjs into ./vendor and make it executable
-mv $build_dir/phantomjs-$phantomjs_version-linux-$phantomjs_type.tar.bz2 $build_dir/vendor/phantomjs
+mv $build_dir/phantomjs-$phantomjs_version-linux-$phantomjs_type $build_dir/vendor/phantomjs
 chmod +x $build_dir/vendor/phantomjs/bin/*
 PATH=$build_dir/vendor/phantomjs/bin:$PATH
 

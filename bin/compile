@@ -52,6 +52,23 @@ mv $build_dir/node-v$node_version-linux-x64 $build_dir/vendor/node
 chmod +x $build_dir/vendor/node/bin/*
 PATH=$build_dir/vendor/node/bin:$PATH
 
+# Phantomjs variables
+phantomjs_version="1.9.7"
+
+# Determine which type of phantomjs to download (x86_64 or i686)
+phantomjs_type=$(uname -m)
+
+# Download phantomjs
+status "Downloading and installing phantomjs"
+phantomjs_url="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$phantomjs_version-linux-$phantomjs_type.tar.bz2"
+# Ugly hack to get the mirror url
+curl $phantomjs_mirror_url -L -s -o - | tar xjf - -C $build_dir
+
+# Move phantomjs into ./vendor and make it executable
+mv $build_dir/phantomjs-$phantomjs_version-linux-$phantomjs_type.tar.bz2 $build_dir/vendor/phantomjs
+chmod +x $build_dir/vendor/phantomjs/bin/*
+PATH=$build_dir/vendor/phantomjs/bin:$PATH
+
 # Run subsequent node/npm commands from the build path
 cd $build_dir
 
@@ -130,7 +147,7 @@ fi
 # Update the PATH
 status "Building runtime environment"
 mkdir -p $build_dir/.profile.d
-echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\";" > $build_dir/.profile.d/nodejs.sh
+echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/vendor/phantomjs/bin:\$HOME/node_modules/.bin:\$PATH\";" > $build_dir/.profile.d/nodejs.sh
 
 # Post package.json to nomnom service
 # Use a subshell so failures won't break the build.
